@@ -27,17 +27,17 @@ class Musteri {
 
     public void gonderiGecmisiniListele(JTextArea output) {
         if (gonderiGecmisi.isEmpty()) {
-            output.setText("Gönderi geçmişi boş.");
+            output.setText("Gonderi gecmisi bos.");
         } else {
             StringBuilder sb = new StringBuilder();
             // Reverse order for displaying
             List<Gonderi> reversedList = new ArrayList<>(gonderiGecmisi);
             Collections.reverse(reversedList);
             for (Gonderi gonderi : reversedList) {
-                sb.append("Gönderi ID: ").append(gonderi.gonderiID)
+                sb.append("Gonderi ID: ").append(gonderi.gonderiID)
                         .append(", Tarih: ").append(gonderi.tarih)
                         .append(", Durum: ").append(gonderi.teslimDurumu)
-                        .append(", Süre: ").append(gonderi.teslimSuresi).append(" gün\n");
+                        .append(", Sure: ").append(gonderi.teslimSuresi).append(" gun\n");
             }
             output.setText(sb.toString());
         }
@@ -76,14 +76,14 @@ class Sehir {
     }
 
     public void agaciGoruntule(String prefix, JTextArea output) {
-        output.append(prefix + "- " + sehirAdi + " (Teslim Süre: " + teslimSuresi + " gün)\n");
+        output.append(prefix + "- " + sehirAdi + " (Teslim Sure: " + teslimSuresi + " gun)\n");
         for (Sehir altSehir : altSehirler) {
             altSehir.agaciGoruntule(prefix + "    ", output);
         }
     }
 
     public void agaciCiz(Graphics g, int x, int y, int xOffset, int yOffset) {
-        g.drawString(sehirAdi + " (" + teslimSuresi + " gün)", x, y);
+        g.drawString(sehirAdi + " (" + teslimSuresi + " gun)", x, y);
         for (int i = 0; i < altSehirler.size(); i++) {
             int childX = x - xOffset / 2 + (xOffset / altSehirler.size()) * i;
             int childY = y + yOffset;
@@ -111,7 +111,7 @@ class KargoTakipSistemi {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
 
-        JLabel headerLabel = new JLabel("KARGO TAKİP SİSTEMİ", SwingConstants.CENTER);
+        JLabel headerLabel = new JLabel("KARGO TAKIP SISTEMI", SwingConstants.CENTER);
         headerLabel.setFont(new Font("Tahoma", Font.BOLD, 36));
         headerLabel.setForeground(new Color(0, 48, 73));
         headerLabel.setBorder(BorderFactory.createEmptyBorder(20, 10, 15, 10));
@@ -130,12 +130,12 @@ class KargoTakipSistemi {
         Font font = new Font("Tahoma", Font.PLAIN, 16);
         Color buttonColor = new Color(0, 123, 255);
 
-        JButton musteriEkleButton = createStyledButton("Yeni Müşteri Ekle", font, buttonColor);
-        JButton gonderiEkleButton = createStyledButton("Kargo Gönderimi Ekle", font, buttonColor);
-        JButton gonderiListeleButton = createStyledButton("Gönderim Geçmişini Görüntüle", font, buttonColor);
-        JButton son5GonderiButton = createStyledButton("Son 5 Gönderiyi Görüntüle", font, buttonColor);
-        JButton teslimatRotaEkleButton = createStyledButton("Teslimat Rotalarını Oluştur", font, buttonColor);
-        JButton teslimatRotaGoruntuleButton = createStyledButton("Teslimat Rotalarını Göster", font, buttonColor);
+        JButton musteriEkleButton = createStyledButton("Yeni Musteri Ekle", font, buttonColor);
+        JButton gonderiEkleButton = createStyledButton("Kargo Gonderimi Ekle", font, buttonColor);
+        JButton gonderiListeleButton = createStyledButton("Gonderim Gecmisini Goruntule", font, buttonColor);
+        JButton son5GonderiButton = createStyledButton("Son 5 Gonderiyi Goruntule", font, buttonColor);
+        JButton teslimatRotaEkleButton = createStyledButton("Teslimat Rotalarini Olustur", font, buttonColor);
+        JButton teslimatRotaGoruntuleButton = createStyledButton("Teslimat Rotalarini Goster", font, buttonColor);
         JTextArea output = new JTextArea();
         output.setFont(font);
         output.setEditable(false);
@@ -165,44 +165,44 @@ class KargoTakipSistemi {
 
         // Action listeners remain unchanged
         musteriEkleButton.addActionListener(e -> {
-            String isim = JOptionPane.showInputDialog("Müşteri ismi:");
-            String soyisim = JOptionPane.showInputDialog("Müşteri soyismi:");
-            int musteriID = Integer.parseInt(JOptionPane.showInputDialog("Müşteri ID:"));
+            String isim = JOptionPane.showInputDialog("Musteri ismi:");
+            String soyisim = JOptionPane.showInputDialog("Musteri soyismi:");
+            int musteriID = Integer.parseInt(JOptionPane.showInputDialog("Musteri ID:"));
             musteriler.add(new Musteri(musteriID, isim, soyisim));
-            output.setText("Yeni müşteri eklendi: " + isim + " " + soyisim);
+            output.setText("Yeni musteri eklendi: " + isim + " " + soyisim);
         });
 
         gonderiEkleButton.addActionListener(e -> {
-            int musteriID = Integer.parseInt(JOptionPane.showInputDialog("Müşteri ID:"));
+            int musteriID = Integer.parseInt(JOptionPane.showInputDialog("Musteri ID:"));
             Musteri musteri = musteriler.stream()
                     .filter(m -> m.musteriID == musteriID)
                     .findFirst()
                     .orElse(null);
 
             if (musteri == null) {
-                output.setText("Müşteri bulunamadı.");
+                output.setText("Musteri bulunamadi.");
                 return;
             }
 
-            int gonderiID = Integer.parseInt(JOptionPane.showInputDialog("Gönderi ID:"));
-            int teslimSuresi = Integer.parseInt(JOptionPane.showInputDialog("Teslim Süresi (gün):"));
+            int gonderiID = Integer.parseInt(JOptionPane.showInputDialog("Gonderi ID:"));
+            int teslimSuresi = Integer.parseInt(JOptionPane.showInputDialog("Teslim Suresi (gun):"));
             String teslimDurumu = JOptionPane.showInputDialog("Teslim Durumu (Teslim Edildi/Teslim Edilmedi):");
             Gonderi yeniGonderi = new Gonderi(gonderiID, new Date(), teslimDurumu, teslimSuresi);
             musteri.gonderiEkle(yeniGonderi);
-            output.setText("Gönderi başarıyla eklendi.");
+            output.setText("Gonderi basariyla eklendi.");
         });
 
         gonderiListeleButton.addActionListener(e -> {
-            int musteriID = Integer.parseInt(JOptionPane.showInputDialog("Müşteri ID:"));
+            int musteriID = Integer.parseInt(JOptionPane.showInputDialog("Musteri ID:"));
             Musteri musteri = musteriler.stream()
                     .filter(m -> m.musteriID == musteriID)
                     .findFirst()
                     .orElse(null);
 
             if (musteri == null) {
-                output.setText("Müşteri bulunamadı.");
+                output.setText("Musteri bulunamadi.");
             } else {
-                JFrame gonderiGecmisiFrame = new JFrame("Gönderi Geçmişi");
+                JFrame gonderiGecmisiFrame = new JFrame("Gonderi Gecmisi");
                 gonderiGecmisiFrame.setSize(500, 400);
                 JTextArea gonderiOutput = new JTextArea();
                 gonderiOutput.setFont(font);
@@ -229,41 +229,41 @@ class KargoTakipSistemi {
             }
 
             if (son5GonderiStack.isEmpty()) {
-                output.setText("Teslim edilmemiş gönderi bulunamadı.");
+                output.setText("Teslim edilmemis gonderi bulunamadi.");
             } else {
-                StringBuilder sb = new StringBuilder("Son 5 Gönderi:\n");
+                StringBuilder sb = new StringBuilder("Son 5 Gonderi:\n");
                 while (!son5GonderiStack.isEmpty()) {
                     Gonderi gonderi = son5GonderiStack.pop();
-                    sb.append("Gönderi ID: ").append(gonderi.gonderiID)
+                    sb.append("Gonderi ID: ").append(gonderi.gonderiID)
                             .append(", Tarih: ").append(gonderi.tarih)
                             .append(", Durum: ").append(gonderi.teslimDurumu)
-                            .append(", Süre: ").append(gonderi.teslimSuresi).append(" gün\n");
+                            .append(", Sure: ").append(gonderi.teslimSuresi).append(" gun\n");
                 }
                 output.setText(sb.toString());
             }
         });
 
         teslimatRotaEkleButton.addActionListener(e -> {
-            String sehirAdi = JOptionPane.showInputDialog("Şehir Adı:");
-            int sehirID = Integer.parseInt(JOptionPane.showInputDialog("Şehir ID:"));
-            int teslimSuresi = Integer.parseInt(JOptionPane.showInputDialog("Teslim Süresi (gün):"));
+            String sehirAdi = JOptionPane.showInputDialog("Sehir Adi:");
+            int sehirID = Integer.parseInt(JOptionPane.showInputDialog("Sehir ID:"));
+            int teslimSuresi = Integer.parseInt(JOptionPane.showInputDialog("Teslim Suresi (gun):"));
 
-            String bagliSehirAdi = JOptionPane.showInputDialog("Bağlı olduğu şehir (Merkez için 'Merkez' yazın):");
+            String bagliSehirAdi = JOptionPane.showInputDialog("Bagli oldugu sehir (Merkez icin 'Merkez' yazin):");
             Sehir bagliSehir = bagliSehirAdi.equals("Merkez") ? merkez :
                     merkez.altSehirler.stream().filter(s -> s.sehirAdi.equals(bagliSehirAdi)).findFirst().orElse(null);
 
             if (bagliSehir == null) {
-                output.setText("Bağlı şehir bulunamadı.");
+                output.setText("Bagli sehir bulunamadi.");
                 return;
             }
 
             Sehir yeniSehir = new Sehir(sehirAdi, sehirID, teslimSuresi);
             bagliSehir.altSehirEkle(yeniSehir);
-            output.setText("Şehir başarıyla eklendi: " + sehirAdi);
+            output.setText("Sehir basariyla eklendi: " + sehirAdi);
         });
 
         teslimatRotaGoruntuleButton.addActionListener(e -> {
-            JFrame treeFrame = new JFrame("Teslimat Rotaları");
+            JFrame treeFrame = new JFrame("Teslimat Rotalari");
             treeFrame.setSize(800, 600);
             treeFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
